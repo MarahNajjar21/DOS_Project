@@ -33,6 +33,7 @@ def purchase():
      return (result.content)
 
 @app.route("/queryNumbers",methods=['PUT'])
+
 def queryNumbers():
      id=request.json['ID']
      idInt=int(id)
