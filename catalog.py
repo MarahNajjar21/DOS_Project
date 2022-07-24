@@ -36,23 +36,6 @@ def search(topic):
             return  "No Such Book That Have The Same Topic Found!!"
         return jsonify([arr])
 
-@app.route("/updateCost",methods=['PUT'])
-def updateCost():
-    bodyData=request.data
-    with open('/home/sahar/Desktop/pyox/part1/BooksDB.json', 'r') as DBfile:
-        data = DBfile.read()
-        jsonObject = json.loads(data)
-        BooksRecords = jsonObject['BOOK']
-    DBfile.close() 
-    idInt = int(bodyData['ID'])
-    for items in BooksRecords:
-      if items["ID"] == idInt:
-        items["COST"]=int(bodyData['COST'])   
-        newJson=({"BOOK": BooksRecords})
-        with open('/home/sahar/Desktop/pyox/part1/BooksDB.json', 'w') as DBfileWrite:
-         json.dump(newJson, DBfileWrite,indent=3)
-        return "success"
-
 @app.route("/queryNumbers",methods=['PUT'])
 def queryNumbers():
     bodyData=request.data
@@ -74,24 +57,5 @@ def queryNumbers():
           else :return "out of stock"
       else: return "NO such book that have same id"
 
-@app.route("/IncreaseNumbers",methods=['PUT'])
-def IncreaseNumbers():
-    bodyData=request.data
-    with open('/home/sahar/Desktop/pyox/part1/BooksDB.json', 'r') as DBfile:
-        data = DBfile.read()
-        jsonObject = json.loads(data)
-        BooksRecords = jsonObject['BOOK']
-    DBfile.close() 
-    idInt = int(bodyData['ID'])
-    amountInt = int(bodyData['AMOUNTS'])
-    for items in BooksRecords:
-      if items["ID"] == idInt:
-            items["NUMBERS"]=items["NUMBERS"]+amountInt 
-            newJson=({"BOOK": BooksRecords})
-            with open('/home/sahar/Desktop/pyox/part1/BooksDB.json', 'w') as DBfileWrite:
-             json.dump(newJson, DBfileWrite,indent=3)
-            return "success"
-      else: return "NO such book that have same id"
 if _name_ == '_main_':
-
    app.run(debug=True, host='0.0.0.0', port=7002)
