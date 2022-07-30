@@ -1,3 +1,4 @@
+from typing import Type
 from flask import Flask, request, jsonify
 import json
 
@@ -36,16 +37,23 @@ def search(topic):
             return  "No Such Book That Have The Same Topic Found!!"
         return jsonify([arr])
 
-@app.route("/queryNumbers",methods=['PUT'])
-def queryNumbers():
-    bodyData=request.data
+
+
+@app.route("/queryNumbers/<int:id>",methods=['PUT'])
+def queryNumbers(id):
+    print(id)
+    #bodyData=request.data
+    bodyData=json.loads(request.data)
     with open('/home/sahar/Desktop/pyox/part1/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
-    idInt = int(bodyData['ID'])
-    amountInt = int(bodyData['AMOUNTS'])
+
+    idInt = id
+   # amountInt = int(bodyData['AMOUNTS'])
+    amountInt = int(bodyData.get('AMOUNTS'))
+    print(amountInt)
     for items in BooksRecords:
       if items["ID"] == idInt:
           if items["NUMBERS"]!=0:
@@ -57,5 +65,7 @@ def queryNumbers():
           else :return "out of stock"
       else: return "NO such book that have same id"
 
+
 if _name_ == '_main_':
-   app.run(debug=True, host='0.0.0.0', port=7002)
+
+   app.run(debug=True, host='0.0.0.0', port=7018)
