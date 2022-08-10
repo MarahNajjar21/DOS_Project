@@ -1,0 +1,26 @@
+from crypt import methods
+from xml.dom.minidom import TypeInfo
+from flask import Flask, request, jsonify
+import json
+import requests
+import itertools
+app = Flask(name)
+
+IPs=["http://192.168.1.240:7026","http://192.168.1.240:7027"]
+iterator_IPs = itertools.cycle(IPs)
+@app.route("/")
+def home():
+    return "hello"
+
+@app.route("/purchase/<id>",methods=['GET'])
+def purchase(id):
+    idInt = int(id)
+    result= requests.get(next(iterator_IPs)+"/info/{}".format(idInt))
+   # if(result.json()["info"][0]["NUMBERS"]+1>0):
+    buyResult=requests.put(next(iterator_IPs)+"/queryNumbers/{}".format(idInt),data={'AMOUNTS':1})
+    buyResult=requests.put(next(iterator_IPs)+"/queryNumbers/{}".format(idInt),data={'AMOUNTS':1})
+    return buyResult.content
+    
+    
+if name == 'main':
+   app.run(debug=True, host='0.0.0.0', port=7001)
